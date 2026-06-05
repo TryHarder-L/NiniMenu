@@ -174,20 +174,52 @@ export default function More() {
   const checkMut = useMutation({
     mutationFn: (data: { item_name: string; meal_date: string; checked: boolean }) =>
       shoppingListApi.toggle(data),
+    onMutate: async (data) => {
+      await qc.cancelQueries({ queryKey: ["shopping-list"] })
+      const prev = qc.getQueryData<ShoppingCategory[]>(["shopping-list"])
+      if (prev) {
+        qc.setQueryData<ShoppingCategory[]>(["shopping-list"], prev.map((cat) => ({
+          ...cat,
+          items: cat.items.map((item) =>
+            item.name === data.item_name ? { ...item, checked: data.checked } : item
+          ),
+        })))
+      }
+      return { prev }
+    },
     onSuccess: () => {
-      qc.refetchQueries({ queryKey: ["shopping-list"] })
+      qc.invalidateQueries({ queryKey: ["shopping-list"] })
       qc.invalidateQueries({ queryKey: ["achievements"] })
+    },
+    onError: (_err, _data, ctx) => {
+      if (ctx?.prev) qc.setQueryData(["shopping-list"], ctx.prev)
     },
   })
 
   const inventoryMut = useMutation({
     mutationFn: (data: { item_name: string; in_stock: boolean }) =>
       shoppingListApi.setInventory(data),
+    onMutate: async (data) => {
+      await qc.cancelQueries({ queryKey: ["shopping-list"] })
+      const prev = qc.getQueryData<ShoppingCategory[]>(["shopping-list"])
+      if (prev) {
+        qc.setQueryData<ShoppingCategory[]>(["shopping-list"], prev.map((cat) => ({
+          ...cat,
+          items: cat.items.map((item) =>
+            item.name === data.item_name ? { ...item, in_stock: data.in_stock } : item
+          ),
+        })))
+      }
+      return { prev }
+    },
     onSuccess: () => {
-      qc.refetchQueries({ queryKey: ["shopping-list"] })
+      qc.invalidateQueries({ queryKey: ["shopping-list"] })
       qc.invalidateQueries({ queryKey: ["achievements"] })
     },
-    onError: () => toast.error("库存状态更新失败"),
+    onError: (_err, _data, ctx) => {
+      if (ctx?.prev) qc.setQueryData(["shopping-list"], ctx.prev)
+      toast.error("库存状态更新失败")
+    },
   })
 
   const settingsMut = useMutation({

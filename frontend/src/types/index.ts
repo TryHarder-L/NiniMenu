@@ -229,6 +229,46 @@ export interface DishCategoryCounts {
   categories: CategoryCount[]
 }
 
+export interface FavoriteOverviewItem {
+  dish: Dish
+  favorite_created_at: string
+  record_count: number
+  lunch_count: number
+  dinner_count: number
+  last_eaten_at: string
+  avg_rating: number
+  is_never_cooked: boolean
+}
+
+export interface FavoriteCategorySummary {
+  category: string
+  count: number
+  avg_cook_time: number
+  cooked_count: number
+  never_cooked_count: number
+  quick_dish_id: number
+  quick_dish_name: string
+}
+
+export interface FavoriteOverviewStats {
+  total: number
+  category_total: number
+  avg_cook_time: number
+  cooked_count: number
+  never_cooked_count: number
+  quick_dish: Dish | null
+  most_cooked_dish: Dish | null
+}
+
+export interface FavoriteOverview {
+  items: FavoriteOverviewItem[]
+  categories: FavoriteCategorySummary[]
+  stats: FavoriteOverviewStats
+  quick_picks: FavoriteOverviewItem[]
+  most_cooked: FavoriteOverviewItem[]
+  need_try: FavoriteOverviewItem[]
+}
+
 export interface DishRecordsStats {
   total_count: number
   lunch_count: number

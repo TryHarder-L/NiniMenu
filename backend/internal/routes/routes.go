@@ -44,6 +44,7 @@ func Setup(r *gin.Engine) {
 			app.PUT("/records/:id", handlers.UpdateRecord)
 			app.DELETE("/records/:id", handlers.DeleteRecord)
 			app.GET("/favorites", handlers.GetFavorites)
+			app.GET("/favorites/overview", handlers.GetFavoritesOverview)
 			app.POST("/favorites/:dishId", handlers.AddFavorite)
 			app.DELETE("/favorites/:dishId", handlers.RemoveFavorite)
 			app.POST("/pick/lunch", handlers.PickLunch)

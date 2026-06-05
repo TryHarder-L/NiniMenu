@@ -599,7 +599,7 @@ func DeleteShoppingCategoryOverride(itemName string) {
 
 func ToggleShoppingCheck(itemName string, mealDate string, checked bool) {
 	database.DB.Model(&models.ShoppingCheck{}).
-		Where("item_name = ? AND meal_date = ?", itemName, mealDate).
+		Where("item_name = ?", itemName).
 		Update("checked", checked)
 }
 

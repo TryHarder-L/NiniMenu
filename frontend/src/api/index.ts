@@ -1,6 +1,6 @@
 import { api, getUploadErrorMessage } from "./client"
 import defaultClient from "./client"
-import type { Dish, DishInput, PaginatedData, PickResult, BlindBoxResult, MealRecord, StatsData, DashboardData, Achievement, WeekPlan, ShoppingCategory, ShoppingCategoryOverride, Holiday, Quote, DayRating, PhotoWall, DishRecordsResponse, DishCategoryCounts } from "@/types"
+import type { Dish, DishInput, PaginatedData, PickResult, BlindBoxResult, MealRecord, StatsData, DashboardData, Achievement, WeekPlan, ShoppingCategory, ShoppingCategoryOverride, Holiday, Quote, DayRating, PhotoWall, DishRecordsResponse, DishCategoryCounts, FavoriteOverview } from "@/types"
 
 export const dishesApi = {
   list: (params?: Record<string, string>) =>
@@ -39,6 +39,7 @@ export const recordsApi = {
 
 export const favoritesApi = {
   list: () => api<Dish[]>("GET", "/favorites"),
+  overview: () => api<FavoriteOverview>("GET", "/favorites/overview"),
   add: (dishId: number) => api<null>("POST", `/favorites/${dishId}`),
   remove: (dishId: number) => api<null>("DELETE", `/favorites/${dishId}`),
 }
